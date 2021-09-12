@@ -1,0 +1,35 @@
+{
+  "name": "readme-editor",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@bytemd/plugin-footnotes": "^1.10.13",
+    "@bytemd/plugin-gemoji": "^1.10.13",
+    "@bytemd/plugin-gfm": "^1.10.13",
+    "@bytemd/plugin-highlight": "^1.10.13",
+    "@bytemd/react": "^1.10.13",
+    "@primer/css": "^17.5.1",
+    "canvas": "^2.8.0",
+    "classnames": "^2.3.1",
+    "github-syntax-light": "^0.5.0",
+    "next": "11.0.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@types/lodash.groupby": "^4.6.6",
+    "@types/react": "17.0.15",
+    "@types/react-dom": "^17.0.9",
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.0.1",
+    "lodash.throttle": "^4.1.1",
+    "sass": "^1.37.5",
+    "typescript": "4.3.5"
+  }
+}

@@ -1,0 +1,22 @@
+/* bytemd */
+@import "bytemd/dist/index.min.css";
+
+.bytemd {
+  height: 100vh;
+}
+
+// github markdown
+@import "@primer/css/core/index.scss";
+@import "@primer/css/markdown/index.scss";
+
+// syntax highlight
+@import 'highlight.js/styles/github.css';
+
+body {
+  overflow: hidden;
+}
+
+:root {
+  --background-color: 255, 255, 255;
+  --foreground-color: 0,0,0;
+}
