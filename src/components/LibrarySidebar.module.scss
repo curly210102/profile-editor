@@ -1,0 +1,27 @@
+.menuList {
+  user-select: none;
+  overflow: auto;
+  summary {
+    padding: 6px 0;
+    font-weight: bold;
+  }
+  details {
+    li {
+      margin-right: 4px;
+      list-style: none;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      padding: 6px 1em;
+      border-radius: 2px;
+      cursor: pointer;
+      &:hover {
+        background-color: rgba(var(--foreground-color), 0.08);
+      }
+      &.active {
+        background-color: rgba(var(--foreground-color), 1);
+        color: rgba(var(--background-color));
+      }
+    }
+  }
+}
