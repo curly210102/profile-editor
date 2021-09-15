@@ -1,16 +1,20 @@
 import ReactDOM from "react-dom";
 import { BytemdPlugin } from "bytemd";
-import Library from "../../components/Library";
+import ComponentLibrary from "../../components/ComponentLibrary";
 import Modal from "../../components/Modal";
 
 let container: null | HTMLElement = null;
 
-function renderLibraryComponent (isLibraryOpen: boolean) {
+function renderLibraryComponent(isLibraryOpen: boolean) {
   ReactDOM.render(
-    <Modal isOpen={isLibraryOpen} title="Component Library" onClose={() => {
-      renderLibraryComponent(false);
-    }}>
-      <Library />
+    <Modal
+      isOpen={isLibraryOpen}
+      title="Component Library"
+      onClose={() => {
+        renderLibraryComponent(false);
+      }}
+    >
+      <ComponentLibrary />
     </Modal>,
     container
   );

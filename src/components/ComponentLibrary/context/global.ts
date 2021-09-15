@@ -4,6 +4,6 @@ export default React.createContext<{
   store: any;
   dispatch: any;
 }>({
-  store: null,
+  store: "",
   dispatch: null,
 });

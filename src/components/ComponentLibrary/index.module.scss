@@ -1,5 +1,6 @@
 .container {
   height: 100%;
+  overflow: hidden;
   > aside {
     width: 30%;
     height: 100%;
@@ -10,6 +11,8 @@
     width: 70%;
     height: 100%;
     float: right;
+    padding: 0 12px;
+    overflow: hidden;
   }
 }
 

@@ -1,0 +1,25 @@
+.panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+.configuration {
+  flex: 1;
+  overflow: auto;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  a {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 12px;
+    cursor: pointer;
+    color: rgba(var(--foreground-color), 0.6);
+  }
+}

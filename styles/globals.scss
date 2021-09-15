@@ -10,7 +10,7 @@
 @import "@primer/css/markdown/index.scss";
 
 // syntax highlight
-@import 'highlight.js/styles/github.css';
+@import "highlight.js/styles/github.css";
 
 body {
   overflow: hidden;
@@ -18,5 +18,6 @@ body {
 
 :root {
   --background-color: 255, 255, 255;
-  --foreground-color: 0,0,0;
+  --foreground-color: 0, 0, 0;
+  --warning-color: #ff4d4f;
 }

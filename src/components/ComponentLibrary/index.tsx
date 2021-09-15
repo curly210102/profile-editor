@@ -1,8 +1,8 @@
 import React, { useCallback, useReducer, useState } from "react";
-import styles from "./Library.module.scss";
-import LibraryMain from "./LibraryMain";
-import GlobalContext from "./GlobalContext";
-import LibrarySidebar from "./LibrarySidebar";
+import styles from "./index.module.scss";
+import LibraryMain from "./Main";
+import GlobalContext from "./context/global";
+import LibrarySidebar from "./Sidebar";
 
 const reducer: React.Reducer<
   {
@@ -21,7 +21,7 @@ const reducer: React.Reducer<
   }
 };
 
-const Library: React.FC<{}> = () => {
+const ComponentLibrary: React.FC<{}> = () => {
   const [store, dispatch] = useReducer(reducer, {
     activeId: "",
   });
@@ -40,4 +40,4 @@ const Library: React.FC<{}> = () => {
   );
 };
 
-export default Library;
+export default ComponentLibrary;

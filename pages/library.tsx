@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Library from "../src/components/Library";
+import ComponentLibrary from "../src/components/ComponentLibrary";
 
 function LibraryPage() {
-  return <Library />;
+  return <ComponentLibrary />;
 }
 
 export default LibraryPage;

@@ -1,0 +1,19 @@
+.button {
+  outline: none;
+  background-color: rgb(var(--foreground-color));
+  color: rgb(var(--background-color));
+  border: none;
+  border-radius: 2px;
+  padding: 4px 15px;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  &:hover {
+    background-color: rgba(var(--foreground-color), 0.85);
+  }
+  &:active {
+    background-color: rgba(var(--foreground-color), 0.8);
+  }
+}
