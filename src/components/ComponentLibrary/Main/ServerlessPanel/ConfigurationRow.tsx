@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
 import cx from "classnames";
-import styles from "./ConfigurationRow.module.scss";
+import React from "react";
 import ColorPicker from "../../../ColorPicker";
 import Switch from "../../../Switch";
-import Modal from "../../../Modal";
+import styles from "./ConfigurationRow.module.scss";
 
 interface ConfigurationRowProps {
   required: boolean;
@@ -52,6 +51,7 @@ export const StringConfigurationRow: React.FC<StringConfigurationRowProps> = ({
         }}
         placeholder={description}
         title={description ?? name}
+        required={required}
       />
     </ConfigurationRow>
   );
@@ -85,25 +85,38 @@ export const NumberConfigurationRow: React.FC<NumberConfigurationRowProps> = ({
         title={description ?? name}
         min={min ?? 0}
         max={max}
-        placeholder={description}
+        required={required}
+        placeholder="Number"
       />
+      <span className={styles.description}>{description}</span>
     </ConfigurationRow>
   );
 };
 
 interface ColorConfigurationRowProps extends ConfigurationRowProps {
-  onChange: (v: string | string[] | null) => void;
+  onChange: (v: string | string[]) => void;
   value?: number;
   description?: string;
+  gradient?: boolean;
 }
 export const ColorConfigurationRow: React.FC<ColorConfigurationRowProps> = ({
   required,
   name,
   onChange,
+  description,
+  gradient,
 }) => {
   return (
     <ConfigurationRow required={required} name={name}>
-      <ColorPicker onBlur={() => {}} />
+      <ColorPicker
+        onBlur={(v, angle) => {
+          const colors = v.map((v) => v.slice(1));
+          if (colors.length > 1) colors.unshift(`${angle}`);
+          onChange(colors);
+        }}
+        supportGradient={gradient}
+      />
+      <span className={styles.description}>{description}</span>
     </ConfigurationRow>
   );
 };
@@ -112,31 +125,46 @@ interface BooleanConfigurationRowProps extends ConfigurationRowProps {
   value?: boolean;
   onChange: (v: boolean) => void;
   description?: string;
+  defaultValue?: boolean;
 }
 
 export const BooleanConfigurationRow: React.FC<BooleanConfigurationRowProps> =
-  ({ required, name, description, onChange }) => {
+  ({ required, name, description, defaultValue = false, onChange }) => {
     return (
       <ConfigurationRow required={required} name={name}>
-        <Switch onChange={onChange} />
+        <Switch onChange={onChange} defaultValue={defaultValue} />
+        <span className={styles.description}>{description}</span>
       </ConfigurationRow>
     );
   };
 
 interface SelectConfigurationRowProps extends ConfigurationRowProps {
-  onChange: (v: string) => void;
+  onChange: (v: string | string[]) => void;
   description?: string;
   options: string[];
+  multiple?: boolean;
 }
 export const SelectConfigurationRow: React.FC<SelectConfigurationRowProps> = ({
   required,
   name,
   options,
   description,
+  multiple = false,
+  onChange,
 }) => {
   return (
     <ConfigurationRow required={required} name={name}>
-      <select required={required}>
+      <select
+        required={required}
+        onChange={(e) => {
+          const selected: string[] = [];
+          Array.prototype.forEach.call(e.target.options, (option) => {
+            option.selected && option.value && selected.push(option.value);
+          });
+          onChange(selected);
+        }}
+        multiple={multiple}
+      >
         <option value="">--{description}--</option>
         {options.map((option) => (
           <option value={option} key={option}>

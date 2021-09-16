@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
-import ServerlessPanel from "./ServerlessPanel";
-import database from "../database";
+import React, { useContext } from "react";
 import GlobalContext from "../context/global";
+import database from "../database";
+import ServerlessPanel from "./ServerlessPanel";
 
 const LibraryMain: React.FC<{}> = () => {
   const { store } = useContext(GlobalContext);
@@ -12,6 +12,7 @@ const LibraryMain: React.FC<{}> = () => {
   if (panelType === "serverless") {
     Panel = (
       <ServerlessPanel
+        title={activePanelData["title"]}
         configuration={activePanelData["configuration"]}
         requestUrl={activePanelData["requestUrl"]}
       />

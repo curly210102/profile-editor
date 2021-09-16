@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import styles from "./index.module.scss";
 import cx from "classnames";
+import React, { useContext } from "react";
 import GlobalContext from "../context/global";
 import database from "../database";
+import styles from "./index.module.scss";
 
 const libraryData = [
   {
@@ -23,7 +23,7 @@ const libraryData = [
   },
   {
     category: "projects",
-    items: ["github-pin-repos"],
+    items: ["github-pin-repo"],
   },
   {
     category: "Activity",

@@ -1,11 +1,16 @@
-import ReactDOM from "react-dom";
 import { BytemdPlugin } from "bytemd";
-import ComponentLibrary from "../../components/ComponentLibrary";
+import ReactDOM from "react-dom";
+import ComponentLibrary, {
+  IExportSubmit,
+} from "../../components/ComponentLibrary";
 import Modal from "../../components/Modal";
 
 let container: null | HTMLElement = null;
 
-function renderLibraryComponent(isLibraryOpen: boolean) {
+function renderLibraryComponent(
+  isLibraryOpen: boolean,
+  onSubmit?: IExportSubmit
+) {
   ReactDOM.render(
     <Modal
       isOpen={isLibraryOpen}
@@ -14,7 +19,7 @@ function renderLibraryComponent(isLibraryOpen: boolean) {
         renderLibraryComponent(false);
       }}
     >
-      <ComponentLibrary />
+      <ComponentLibrary onSubmit={onSubmit} />
     </Modal>,
     container
   );
@@ -28,13 +33,20 @@ export default function library(): BytemdPlugin {
         cheatsheet: "Open library",
         handler: {
           type: "action",
-          click({ wrapText, editor }) {
+          click({ editor, appendBlock }) {
             if (!container) {
               container = document.createElement("div");
               document.body.appendChild(container);
             }
 
-            renderLibraryComponent(true);
+            renderLibraryComponent(true, (payload) => {
+              if (payload && payload.url) {
+                const pos = appendBlock(`![${payload.title}](${payload.url})`);
+                editor.setSelection(pos);
+                editor.focus();
+              }
+              renderLibraryComponent(false);
+            });
           },
           shortcut: "Ctrl-L",
         },

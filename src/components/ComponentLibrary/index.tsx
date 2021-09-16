@@ -1,7 +1,7 @@
-import React, { useCallback, useReducer, useState } from "react";
+import React, { useReducer } from "react";
+import GlobalContext from "./context/global";
 import styles from "./index.module.scss";
 import LibraryMain from "./Main";
-import GlobalContext from "./context/global";
 import LibrarySidebar from "./Sidebar";
 
 const reducer: React.Reducer<
@@ -21,7 +21,11 @@ const reducer: React.Reducer<
   }
 };
 
-const ComponentLibrary: React.FC<{}> = () => {
+export type IExportSubmit = (payload?: { title: string; url: string }) => void;
+
+const ComponentLibrary: React.FC<{
+  onSubmit?: IExportSubmit;
+}> = ({ onSubmit }) => {
   const [store, dispatch] = useReducer(reducer, {
     activeId: "",
   });
@@ -30,6 +34,7 @@ const ComponentLibrary: React.FC<{}> = () => {
       value={{
         store,
         dispatch,
+        onSubmit,
       }}
     >
       <div className={styles.container}>

@@ -1,5 +1,9 @@
 {
   "debug.javascript.autoAttachFilter": "disabled",
   "editor.formatOnSave": true,
-  "synthwave84.disableGlow": true
+  "synthwave84.disableGlow": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "source.fixAll": true
+  }
 }

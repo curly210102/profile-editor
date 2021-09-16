@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import styles from "./Configuration.module.scss";
 import {
   BooleanConfigurationRow,
   ColorConfigurationRow,
@@ -6,20 +7,38 @@ import {
   SelectConfigurationRow,
   StringConfigurationRow,
 } from "./ConfigurationRow";
-import styles from "./Configuration.module.scss";
 
 export type ConfigurationType = {
   [name: string]: {
     required?: boolean;
     section: string;
     description?: string;
+    cacheId?: string;
   } & (
     | {
-        type: "string" | "boolean" | "number" | "color";
+        type: "string";
+        defaultValue?: string;
+      }
+    | {
+        type: "number";
+        min?: number;
+        max?: number;
+        defaultValue?: number;
+      }
+    | {
+        type: "color";
+        gradient?: boolean;
+        defaultValue?: string;
       }
     | {
         type: "select";
         options: string[];
+        multiple?: boolean;
+        defaultValue?: string;
+      }
+    | {
+        type: "boolean";
+        defaultValue?: boolean;
       }
   );
 };
@@ -37,6 +56,8 @@ export interface IProps {
   onChange: (v: ConfiguredItemsType) => void;
 }
 
+const configurationCache: ConfiguredItemsType = {};
+
 const ServerlessPanelConfiguration: React.FC<IProps> = ({ data, onChange }) => {
   const groups = useMemo(() => {
     const groups = new Map<string, GroupItem[]>();
@@ -52,32 +73,40 @@ const ServerlessPanelConfiguration: React.FC<IProps> = ({ data, onChange }) => {
     return groups;
   }, [data]);
 
-  const [configuredItems, updateConfiguredItems] = useReducer(
-    (
-      state: ConfiguredItemsType,
-      action:
-        | {
-            type: "set";
-            name: string;
-            value: ConfiguredItemsType[string];
-          }
-        | {
-            type: "delete";
-            name: string;
-          }
-    ) => {
-      switch (action.type) {
-        case "set":
-          return { ...state, [action.name]: action.value };
-        case "delete":
-          const { [action.name]: val, ...rest } = state;
-          return rest;
-        default:
-          throw new Error();
-      }
-    },
-    {}
-  );
+  const [configuredItems, updateConfiguredItems] =
+    useState<ConfiguredItemsType>(() => {
+      return Object.entries(data).reduce((configs, [name, { cacheId }]) => {
+        if (cacheId && cacheId in configurationCache) {
+          return { ...configs, [name]: configurationCache[cacheId] };
+        } else {
+          return configs;
+        }
+      }, {});
+    });
+
+  const deleteConfiguredItem = (name: string) => {
+    const { cacheId } = data[name];
+    if (cacheId) {
+      delete configurationCache[cacheId];
+    }
+    updateConfiguredItems((state) => {
+      const { [name]: val, ...rest } = state;
+      return rest;
+    });
+  };
+
+  const setConfiguredItem = (
+    name: string,
+    value: ConfiguredItemsType[string]
+  ) => {
+    const { cacheId } = data[name];
+    if (cacheId) {
+      configurationCache[cacheId] = value;
+    }
+    updateConfiguredItems((state) => {
+      return { ...state, [name]: value };
+    });
+  };
 
   useEffect(() => {
     onChange(configuredItems);
@@ -90,107 +119,67 @@ const ServerlessPanelConfiguration: React.FC<IProps> = ({ data, onChange }) => {
           <details key={groupId} open={true}>
             <summary className={styles.groupHeader}>{groupId}</summary>
             {items.map((item) => {
-              const { name, type, required, description } = item;
+              const { name, type, required, description, defaultValue } = item;
               const value = configuredItems[name];
+
+              const commonProps = {
+                key: name,
+                required: !!required,
+                name,
+                description,
+                onChange: (v: ConfiguredItemsType[string]) => {
+                  if (!v || v === defaultValue) {
+                    deleteConfiguredItem(name);
+                  } else {
+                    setConfiguredItem(name, v);
+                  }
+                },
+              };
               if (type === "string") {
                 return (
                   <StringConfigurationRow
-                    key={name}
-                    required={!!required}
-                    name={name}
+                    {...commonProps}
                     value={typeof value === "string" ? value : ""}
-                    onChange={(v) => {
-                      if (!v) {
-                        updateConfiguredItems({
-                          type: "delete",
-                          name,
-                        });
-                      } else {
-                        updateConfiguredItems({
-                          type: "set",
-                          name,
-                          value: v,
-                        });
-                      }
-                    }}
-                    description={description}
                   />
                 );
               } else if (type === "number") {
                 return (
                   <NumberConfigurationRow
-                    key={name}
-                    required={!!required}
-                    name={name}
+                    {...commonProps}
                     onChange={(v) => {
                       if (typeof v !== "number") {
-                        updateConfiguredItems({
-                          type: "delete",
-                          name,
-                        });
+                        deleteConfiguredItem(name);
                       } else {
-                        updateConfiguredItems({
-                          type: "set",
-                          name,
-                          value: v,
-                        });
+                        setConfiguredItem(name, v);
                       }
                     }}
-                    description={description}
                   />
                 );
               } else if (type === "color") {
                 return (
                   <ColorConfigurationRow
-                    key={name}
-                    required={!!required}
-                    name={name}
-                    onChange={(v) => {}}
+                    {...commonProps}
+                    gradient={item.gradient}
                   />
                 );
               } else if (type === "boolean") {
                 return (
                   <BooleanConfigurationRow
-                    key={name}
-                    required={!!required}
-                    name={name}
-                    onChange={(v) => {
-                      if (!v) {
-                        updateConfiguredItems({
-                          type: "delete",
-                          name,
-                        });
-                      } else {
-                        updateConfiguredItems({
-                          type: "set",
-                          name,
-                          value: v,
-                        });
-                      }
-                    }}
-                    description={description}
+                    {...commonProps}
+                    defaultValue={item.defaultValue}
                   />
                 );
               } else if (type === "select") {
                 return (
                   <SelectConfigurationRow
-                    key={name}
-                    required={!!required}
-                    name={name}
+                    {...commonProps}
                     options={item.options}
-                    description={description}
+                    multiple={item.multiple}
                     onChange={(v) => {
-                      if (!v) {
-                        updateConfiguredItems({
-                          type: "delete",
-                          name,
-                        });
+                      if (v.length === 0) {
+                        deleteConfiguredItem(name);
                       } else {
-                        updateConfiguredItems({
-                          type: "set",
-                          name,
-                          value: v,
-                        });
+                        setConfiguredItem(name, v);
                       }
                     }}
                   />
