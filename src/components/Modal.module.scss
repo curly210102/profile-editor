@@ -23,6 +23,15 @@
   padding: 8px 16px;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease-in-out;
+}
+
+.fullscreen {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 0;
 }
 
 .header {

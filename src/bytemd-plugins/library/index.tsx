@@ -1,9 +1,7 @@
 import { BytemdPlugin } from "bytemd";
 import ReactDOM from "react-dom";
-import ComponentLibrary, {
-  IExportSubmit,
-} from "../../components/ComponentLibrary";
 import Modal from "../../components/Modal";
+import ComponentLibrary, { IExportSubmit } from "../../GPRLibrary";
 
 let container: null | HTMLElement = null;
 
@@ -12,15 +10,19 @@ function renderLibraryComponent(
   onSubmit?: IExportSubmit
 ) {
   ReactDOM.render(
-    <Modal
-      isOpen={isLibraryOpen}
-      title="Component Library"
-      onClose={() => {
-        renderLibraryComponent(false);
-      }}
-    >
-      <ComponentLibrary onSubmit={onSubmit} />
-    </Modal>,
+    isLibraryOpen ? (
+      <Modal
+        isOpen={true}
+        title="Component Library"
+        onClose={() => {
+          renderLibraryComponent(false);
+        }}
+      >
+        <ComponentLibrary onSubmit={onSubmit} />
+      </Modal>
+    ) : (
+      <div></div>
+    ),
     container
   );
 }

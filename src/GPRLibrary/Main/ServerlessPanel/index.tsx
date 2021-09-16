@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React, { useCallback, useContext, useMemo, useState } from "react";
-import Button from "../../../Button";
+import Button from "../../../components/Button";
 import GlobalContext from "../../context/global";
 import type { ConfigurationType } from "./Configuration";
 import Configuration from "./Configuration";
@@ -44,7 +44,7 @@ const ServerlessPanel: React.FC<Props> = ({
     [requestUrl, requiredNames]
   );
   return (
-    <div className={styles.panel} key={store.activeId}>
+    <article className={styles.panel} key={store.activeId}>
       <section className={styles.configuration}>
         <Configuration data={configuration} onChange={handleChange} />
       </section>
@@ -78,7 +78,7 @@ const ServerlessPanel: React.FC<Props> = ({
           </Button>
         </section>
       ) : null}
-    </div>
+    </article>
   );
 };
 

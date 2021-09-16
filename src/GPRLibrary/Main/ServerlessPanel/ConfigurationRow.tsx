@@ -1,7 +1,7 @@
 import cx from "classnames";
 import React from "react";
-import ColorPicker from "../../../ColorPicker";
-import Switch from "../../../Switch";
+import ColorPicker from "../../../components/ColorPicker";
+import Switch from "../../../components/Switch";
 import styles from "./ConfigurationRow.module.scss";
 
 interface ConfigurationRowProps {

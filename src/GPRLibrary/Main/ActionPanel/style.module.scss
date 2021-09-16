@@ -1,0 +1,25 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  header {
+    h5 {
+      color: rgba(var(--foreground-color), 0.3);
+    }
+  }
+  main {
+    flex: 1;
+    overflow: auto;
+    p {
+      white-space: pre-line;
+    }
+  }
+  footer {
+    text-align: right;
+  }
+  .preview {
+    width: 100%;
+    max-width: 680px;
+  }
+}

@@ -1,10 +1,13 @@
+import type { Props as IActionPanelType } from "../Main/ActionPanel";
 import type { ConfigurationType } from "../Main/ServerlessPanel";
 import GithubActivityGraph from "./GithubActivityGraph";
 import GithubMostUsedLanguages from "./GithubMostUsedLanguages";
 import GithubPinRepo from "./GithubPinRepo";
+import GithubRecentActivity from "./GithubRecentActivity";
 import GithubStats from "./GithubStats";
 import GithubStreak from "./GithubStreak";
 import GithubTrophy from "./GithubTrophy";
+import LatestBlogPost from "./LatestBlogPost";
 import WakaTimeStats from "./WakatimeStats";
 
 interface IData {
@@ -17,8 +20,12 @@ export interface IServerlessPanelData extends IData {
   requestUrl: string;
 }
 
+export interface IActionPanelData extends IData, IActionPanelType {
+  type: "action";
+}
+
 const database: {
-  [_: string]: IServerlessPanelData;
+  [_: string]: IServerlessPanelData | IActionPanelData;
 } = {
   "github-stats": GithubStats,
   "github-streak": GithubStreak,
@@ -28,5 +35,7 @@ const database: {
   "wakatime-stats": WakaTimeStats,
   "leetcode-stats": GithubActivityGraph,
   "github-pin-repo": GithubPinRepo,
+  "github-recent-activity": GithubRecentActivity,
+  "latest-blog-posts": LatestBlogPost,
 };
 export default database;
