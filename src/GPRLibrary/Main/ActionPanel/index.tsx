@@ -1,7 +1,6 @@
 import Image from "next/image";
-import React, { useContext, useRef } from "react";
+import React, { useRef } from "react";
 import Button from "../../../components/Button";
-import GlobalContext from "../../context/global";
 import styles from "./style.module.scss";
 
 export interface Props {
@@ -17,7 +16,6 @@ const ActionPanel: React.FC<Props> = ({
   previewImgUrl,
   requestUrl,
 }) => {
-  const { onSubmit } = useContext(GlobalContext);
   const linkRef = useRef<HTMLAnchorElement>(null);
   return (
     <article className={styles.panel}>
@@ -40,7 +38,6 @@ const ActionPanel: React.FC<Props> = ({
         <Button
           onClick={() => {
             linkRef.current?.click();
-            onSubmit?.();
           }}
         >
           Go to Action Marketplace

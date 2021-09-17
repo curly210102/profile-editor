@@ -20,10 +20,11 @@
   left: 50%;
   transform: translate(-50%, -50%);
   overflow: hidden;
-  padding: 8px 16px;
+  padding: 0 16px;
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease-in-out;
+  will-change: width, height, border-radius, max-width, max-height;
 }
 
 .fullscreen {
@@ -47,7 +48,8 @@
       opacity: 1;
     }
   }
-  padding-bottom: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgb(var(--border-color));
 }
 
 .main {

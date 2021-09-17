@@ -21,7 +21,10 @@ const reducer: React.Reducer<
   }
 };
 
-export type IExportSubmit = (payload?: { title: string; url: string }) => void;
+type IExportSubmitPayload = { title: string; url: string };
+export type IExportSubmit = (
+  payload?: IExportSubmitPayload | IExportSubmitPayload[]
+) => void;
 
 const ComponentLibrary: React.FC<{
   onSubmit?: IExportSubmit;

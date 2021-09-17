@@ -1,0 +1,31 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+}
+
+.select {
+  user-select: none;
+  cursor: pointer;
+  color: rgba(var(--foreground-color), 0.6);
+  text-decoration: underline;
+  svg {
+    vertical-align: middle;
+    margin-top: -1.4%;
+    margin-right: 4px;
+  }
+}
+
+.count {
+  line-height: 16px;
+  text-align: center;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  font-size: 12px;
+  border-radius: 50%;
+  color: rgb(var(--background-color));
+  background-color: rgba(var(--foreground-color), 0.3);
+  margin-left: 4px;
+}

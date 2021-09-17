@@ -50,16 +50,18 @@ const ServerlessPanel: React.FC<Props> = ({
       </section>
       {url ? (
         <section className={styles.preview}>
-          <Image
-            key={url}
-            src={url}
-            alt="Preview"
-            layout="fill"
-            placeholder="blur"
-            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNMTEytBwAD+gGoTybNXQAAAABJRU5ErkJggg=="
-            unoptimized={true}
-            loading="eager"
-          />
+          <div className={styles.imageContainer}>
+            <Image
+              key={url}
+              src={url}
+              alt="Preview"
+              layout="fill"
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII="
+              unoptimized={true}
+              loading="eager"
+            />
+          </div>
         </section>
       ) : null}
       {url ? (

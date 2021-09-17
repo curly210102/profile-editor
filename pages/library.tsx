@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import ComponentLibrary from "../src/components/ComponentLibrary";
+import React from "react";
+import GPRLibrary from "../src/GPRLibrary";
 
 function LibraryPage() {
-  return <ComponentLibrary />;
+  return <GPRLibrary />;
 }
 
 export default LibraryPage;

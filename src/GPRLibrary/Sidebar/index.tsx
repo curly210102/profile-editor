@@ -7,7 +7,7 @@ import styles from "./index.module.scss";
 const libraryData = [
   {
     category: "badge",
-    items: ["languages", "tools", "stats"],
+    items: ["badge", "statistics"],
   },
   {
     category: "charts",

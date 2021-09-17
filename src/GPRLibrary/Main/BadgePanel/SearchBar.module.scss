@@ -1,0 +1,15 @@
+.searchBar {
+  input {
+    border: none;
+    margin: 12px 0;
+    border-radius: 2px;
+    background-color: rgb(var(--border-color));
+    width: 100%;
+    padding: 0.8em 1em;
+    outline: none;
+    &::placeholder {
+      color: rgba(var(--foreground-color), 0.3);
+    }
+    font-size: 16px;
+  }
+}

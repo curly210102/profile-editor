@@ -23,14 +23,14 @@
   }
   .label + input {
     outline: none;
-    border: 1px solid rgba(var(--foreground-color), 0.08);
+    border: 1px solid rgba(var(--border-color), 0.8);
     border-radius: 2px;
     padding: 4px 10px;
     transition: all 0.1s ease-in;
     margin-right: 2px;
     &:focus {
-      border-color: rgba(var(--foreground-color), 0.3);
-      box-shadow: 0 0 0 2px rgba(var(--foreground-color), 0.1);
+      border-color: rgba(var(--border-color), 1);
+      box-shadow: 0 0 0 2px rgba(var(--border-color), 0.8);
     }
     &::placeholder {
       color: rgba(var(--foreground-color), 0.3);
@@ -51,7 +51,7 @@
   }
   .label + select {
     outline: none;
-    border: 1px solid rgba(var(--foreground-color), 0.08);
+    border: 1px solid rgb(var(--border-color));
     padding: 4px;
   }
 

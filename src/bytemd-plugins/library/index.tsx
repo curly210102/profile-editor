@@ -42,11 +42,20 @@ export default function library(): BytemdPlugin {
             }
 
             renderLibraryComponent(true, (payload) => {
-              if (payload && payload.url) {
-                const pos = appendBlock(`![${payload.title}](${payload.url})`);
-                editor.setSelection(pos);
-                editor.focus();
+              if (!payload) {
+                return renderLibraryComponent(false);
               }
+              const payloads = Array.isArray(payload) ? payload : [payload];
+
+              console.log(payloads);
+
+              let pos;
+              payloads.forEach(({ title, url }) => {
+                pos = appendBlock(`![${title}](${url})`);
+              });
+              pos && editor.setSelection(pos);
+              editor.focus();
+
               renderLibraryComponent(false);
             });
           },

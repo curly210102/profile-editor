@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import GlobalContext from "../context/global";
 import database from "../database";
 import ActionPanel from "./ActionPanel";
+import BadgePanel from "./BadgePanel";
 import ServerlessPanel from "./ServerlessPanel";
 
 const LibraryMain: React.FC<{}> = () => {
@@ -27,6 +28,8 @@ const LibraryMain: React.FC<{}> = () => {
         requestUrl={panelData["requestUrl"]}
       />
     );
+  } else if (panelType === "badge") {
+    Panel = <BadgePanel />;
   }
 
   return <main>{Panel}</main>;

@@ -1,5 +1,6 @@
 import type { Props as IActionPanelType } from "../Main/ActionPanel";
 import type { ConfigurationType } from "../Main/ServerlessPanel";
+import Badge from "./Badge";
 import GithubActivityGraph from "./GithubActivityGraph";
 import GithubMostUsedLanguages from "./GithubMostUsedLanguages";
 import GithubPinRepo from "./GithubPinRepo";
@@ -24,8 +25,12 @@ export interface IActionPanelData extends IData, IActionPanelType {
   type: "action";
 }
 
+export interface IBadgePanelData extends IData {
+  type: "badge";
+}
+
 const database: {
-  [_: string]: IServerlessPanelData | IActionPanelData;
+  [_: string]: IServerlessPanelData | IActionPanelData | IBadgePanelData;
 } = {
   "github-stats": GithubStats,
   "github-streak": GithubStreak,
@@ -37,5 +42,6 @@ const database: {
   "github-pin-repo": GithubPinRepo,
   "github-recent-activity": GithubRecentActivity,
   "latest-blog-posts": LatestBlogPost,
+  badge: Badge,
 };
 export default database;

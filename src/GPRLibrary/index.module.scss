@@ -2,16 +2,19 @@
   height: 100%;
   overflow: hidden;
   > aside {
-    width: 20%;
+    width: calc(28% - 1px);
     height: 100%;
     background-color: rgba(var(--background-color), 0.4);
     float: left;
+    border-right: 1px solid rgb(var(--border-color));
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
   > main {
-    width: 80%;
+    width: 72%;
     height: 100%;
     float: right;
-    padding: 0 12px;
+    padding: 4px 0 16px 12px;
     overflow: hidden;
   }
 }
@@ -21,6 +24,8 @@
     > aside {
       width: 100%;
       display: block;
+      border-right: none;
+      border-bottom: 1px solid rgb(var(--border-color));
     }
     > main {
       width: 100%;
