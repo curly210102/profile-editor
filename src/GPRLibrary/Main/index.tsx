@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import GlobalContext from "../context/global";
-import database from "../database";
+import database, { isAction, isBadge, isServerless } from "../database";
 import ActionPanel from "./ActionPanel";
 import BadgePanel from "./BadgePanel";
 import ServerlessPanel from "./ServerlessPanel";
@@ -8,10 +8,9 @@ import ServerlessPanel from "./ServerlessPanel";
 const LibraryMain: React.FC<{}> = () => {
   const { store } = useContext(GlobalContext);
   const panelData = database[store.activeId];
-  const panelType = panelData?.["type"];
   let Panel = null;
 
-  if (panelType === "serverless") {
+  if (isServerless(panelData)) {
     Panel = (
       <ServerlessPanel
         title={panelData["title"]}
@@ -19,7 +18,7 @@ const LibraryMain: React.FC<{}> = () => {
         requestUrl={panelData["requestUrl"]}
       />
     );
-  } else if (panelType === "action") {
+  } else if (isAction(panelData)) {
     Panel = (
       <ActionPanel
         title={panelData["title"]}
@@ -28,7 +27,7 @@ const LibraryMain: React.FC<{}> = () => {
         requestUrl={panelData["requestUrl"]}
       />
     );
-  } else if (panelType === "badge") {
+  } else if (isBadge(panelData)) {
     Panel = <BadgePanel />;
   }
 

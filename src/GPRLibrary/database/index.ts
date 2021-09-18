@@ -29,8 +29,22 @@ export interface IBadgePanelData extends IData {
   type: "badge";
 }
 
+type IDataType = IServerlessPanelData | IActionPanelData | IBadgePanelData;
+
+export function isServerless(data: IDataType): data is IServerlessPanelData {
+  return data?.["type"] === "serverless";
+}
+
+export function isAction(data: IDataType): data is IActionPanelData {
+  return data?.["type"] === "action";
+}
+
+export function isBadge(data: IDataType): data is IBadgePanelData {
+  return data?.["type"] === "badge";
+}
+
 const database: {
-  [_: string]: IServerlessPanelData | IActionPanelData | IBadgePanelData;
+  [_: string]: IDataType;
 } = {
   "github-stats": GithubStats,
   "github-streak": GithubStreak,
