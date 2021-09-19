@@ -1,13 +1,15 @@
+import cx, { Argument } from "classnames";
 import React from "react";
 import styles from "./Switch.module.scss";
 
 interface Props {
   onChange: (v: boolean) => void;
   defaultValue: boolean;
+  className?: Argument;
 }
-const Switch: React.FC<Props> = ({ onChange, defaultValue }) => {
+const Switch: React.FC<Props> = ({ onChange, defaultValue, className }) => {
   return (
-    <label className={styles.switch}>
+    <label className={cx(styles.switch, className)}>
       <input
         type="checkbox"
         style={{ display: "none" }}

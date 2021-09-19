@@ -1,7 +1,6 @@
 import cx from "classnames";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import type { IBadge, ISelected } from ".";
-import BadgeConfiguration from "./Configuration";
 import styles from "./Main.module.scss";
 
 interface Props {
@@ -33,8 +32,17 @@ const BadgePanelMain: React.FC<Props> = ({
     theme: "default",
     style: "for-the-badge",
   });
+  const updateConfiguration = useCallback(
+    (payload: Partial<IConfiguration>) => {
+      setConfiguration((state) => ({
+        ...state,
+        ...payload,
+      }));
+    },
+    []
+  );
   return (
-    <>
+    <div className={styles.container}>
       <div className={styles.badgeList}>
         {list.map((item) => {
           const { title } = item;
@@ -69,11 +77,11 @@ const BadgePanelMain: React.FC<Props> = ({
           );
         })}
       </div>
-      <BadgeConfiguration
+      {/* <BadgeConfiguration
         configuration={configuration}
-        setConfiguration={setConfiguration}
-      />
-    </>
+        updateConfiguration={updateConfiguration}
+      /> */}
+    </div>
   );
 };
 

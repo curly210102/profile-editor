@@ -6,3 +6,13 @@
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
+
+.container {
+  :global(.gpw) {
+    position: relative;
+    padding: 0;
+    :global(.popover) {
+      background-color: rgb(var(--background-color));
+    }
+  }
+}

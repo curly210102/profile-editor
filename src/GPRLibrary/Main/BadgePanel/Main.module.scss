@@ -1,3 +1,14 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  overflow: hidden;
+}
+.badgeList {
+  flex-grow: 1;
+  overflow: auto;
+}
+
 .badgeBlock {
   border-radius: 4px;
   background-color: rgb(var(--background-color));

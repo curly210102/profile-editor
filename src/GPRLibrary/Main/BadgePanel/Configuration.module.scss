@@ -1,2 +1,23 @@
 .container {
+  width: 32%;
+  border-left: 1px solid rgb(var(--border-color));
+  overflow-y: auto;
+}
+
+.item {
+  padding: 12px 0;
+  margin: 0 10px;
+  border-bottom: 1px solid rgb(var(--border-color));
+}
+
+.textInput {
+  width: 100%;
+}
+
+.numberInput {
+  width: 100%;
+}
+
+.select {
+  width: 100%;
 }

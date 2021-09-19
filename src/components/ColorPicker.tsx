@@ -95,30 +95,32 @@ const ColorPicker: React.FC<Props> = ({ onBlur, supportGradient = false }) => {
   );
 
   return (
-    <GradientPickerPopover
-      {...{
-        open,
-        setOpen: toggle,
-        width: 220,
-        paletteHeight: 32,
-        palette,
-        onPaletteChange: setPalette,
-        trigger: Trigger,
-        ...(supportGradient
-          ? {
-              angle,
-              setAngle,
-              showAnglePicker: true,
-              maxStops: 3,
-            }
-          : {
-              maxStops: 1,
-            }),
-      }}
-    >
-      {/* @ts-ignore */}
-      <WrappedColorPicker />
-    </GradientPickerPopover>
+    <div className={styles.container}>
+      <GradientPickerPopover
+        {...{
+          open,
+          setOpen: toggle,
+          width: 220,
+          paletteHeight: 32,
+          palette,
+          onPaletteChange: setPalette,
+          trigger: Trigger,
+          ...(supportGradient
+            ? {
+                angle,
+                setAngle,
+                showAnglePicker: true,
+                maxStops: 3,
+              }
+            : {
+                maxStops: 1,
+              }),
+        }}
+      >
+        {/* @ts-ignore */}
+        <WrappedColorPicker />
+      </GradientPickerPopover>
+    </div>
   );
 };
 

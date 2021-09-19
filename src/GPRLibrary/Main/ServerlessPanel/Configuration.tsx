@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
+import ColorPicker from "../../../components/ColorPicker";
+import NumberInput from "../../../components/NumberInput";
+import Select from "../../../components/Select";
+import Switch from "../../../components/Switch";
+import TextInput from "../../../components/TextInput";
 import styles from "./Configuration.module.scss";
-import {
-  BooleanConfigurationRow,
-  ColorConfigurationRow,
-  NumberConfigurationRow,
-  SelectConfigurationRow,
-  StringConfigurationRow,
-} from "./ConfigurationRow";
+import ConfigurationRow from "./ConfigurationRow";
+import rowStyles from "./ConfigurationRow.module.scss";
 
 type StringConfigurationType = {
   type: "string";
@@ -147,12 +147,12 @@ const ServerlessPanelConfiguration: React.FC<IProps> = ({ data, onChange }) => {
           <details key={groupId} open={true}>
             <summary className={styles.groupHeader}>{groupId}</summary>
             {items.map((item) => {
-              const { name, required, description, defaultValue } = item;
+              const { name, description, defaultValue } = item;
               const value = configuredItems[name];
-
+              const required = !!item.required;
               const commonProps = {
                 key: name,
-                required: !!required,
+                required,
                 name,
                 description,
                 onChange: (v: ConfiguredItemsType[string]) => {
@@ -165,52 +165,72 @@ const ServerlessPanelConfiguration: React.FC<IProps> = ({ data, onChange }) => {
               };
               if (isStringConfigurationType(item)) {
                 return (
-                  <StringConfigurationRow
-                    {...commonProps}
-                    value={typeof value === "string" ? value : ""}
-                  />
+                  <ConfigurationRow required={required} name={name}>
+                    <TextInput
+                      {...commonProps}
+                      value={typeof value === "string" ? value : ""}
+                      className={rowStyles.textInput}
+                    />
+                  </ConfigurationRow>
                 );
               } else if (isNumberConfigurationType(item)) {
                 return (
-                  <NumberConfigurationRow
-                    {...commonProps}
-                    onChange={(v) => {
-                      if (typeof v !== "number") {
-                        deleteConfiguredItem(name);
-                      } else {
-                        setConfiguredItem(name, v);
-                      }
-                    }}
-                  />
+                  <ConfigurationRow required={required} name={name}>
+                    <NumberInput
+                      {...commonProps}
+                      onChange={(v) => {
+                        if (typeof v !== "number") {
+                          deleteConfiguredItem(name);
+                        } else {
+                          setConfiguredItem(name, v);
+                        }
+                      }}
+                      className={rowStyles.numberInput}
+                    />
+                    <span className={rowStyles.description}>{description}</span>
+                  </ConfigurationRow>
                 );
               } else if (isColorConfigurationType(item)) {
                 return (
-                  <ColorConfigurationRow
-                    {...commonProps}
-                    gradient={item.gradient}
-                  />
+                  <ConfigurationRow required={required} name={name}>
+                    <ColorPicker
+                      onBlur={(v, angle) => {
+                        const colors = v.map((v) => v.slice(1));
+                        if (colors.length > 1) colors.unshift(`${angle}`);
+                        commonProps.onChange(colors);
+                      }}
+                      supportGradient={item.gradient}
+                    />
+                    <span className={rowStyles.description}>{description}</span>
+                  </ConfigurationRow>
                 );
               } else if (isBooleanConfigurationType(item)) {
                 return (
-                  <BooleanConfigurationRow
-                    {...commonProps}
-                    defaultValue={item.defaultValue}
-                  />
+                  <ConfigurationRow required={required} name={name}>
+                    <Switch
+                      onChange={commonProps.onChange}
+                      defaultValue={!!item.defaultValue}
+                      className={rowStyles.switch}
+                    />
+                    <span className={rowStyles.description}>{description}</span>
+                  </ConfigurationRow>
                 );
               } else if (isSelectConfigurationType(item)) {
                 return (
-                  <SelectConfigurationRow
-                    {...commonProps}
-                    options={item.options}
-                    multiple={item.multiple}
-                    onChange={(v) => {
-                      if (v.length === 0) {
-                        deleteConfiguredItem(name);
-                      } else {
-                        setConfiguredItem(name, v);
-                      }
-                    }}
-                  />
+                  <ConfigurationRow required={required} name={name}>
+                    <Select
+                      {...commonProps}
+                      options={item.options}
+                      multiple={item.multiple}
+                      onChange={(v) => {
+                        if (v.length === 0) {
+                          deleteConfiguredItem(name);
+                        } else {
+                          setConfiguredItem(name, v);
+                        }
+                      }}
+                    />
+                  </ConfigurationRow>
                 );
               } else {
                 return null;
