@@ -1,6 +1,12 @@
+.sideBar {
+  display: flex;
+  flex-direction: column;
+}
+
 .menuList {
   user-select: none;
   overflow: auto;
+  flex: 1;
   summary {
     padding: 6px 0;
     font-weight: bold;
@@ -23,5 +29,16 @@
         color: rgba(var(--background-color));
       }
     }
+  }
+}
+
+.footer {
+  justify-self: flex-end;
+  border-top: 1px solid rgb(var(--border-color));
+  font-size: 12px;
+  text-align: center;
+  padding: 6px;
+  a {
+    color: rgb(var(--foreground-color), 0.36);
   }
 }

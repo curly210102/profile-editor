@@ -1,6 +1,8 @@
+import React from "react";
 import type { Props as IActionPanelType } from "../Main/ActionPanel";
 import type { ConfigurationType } from "../Main/ServerlessPanel";
 import Badge from "./Badge";
+import BadgeStatistics from "./BadgeStatistics";
 import GithubActivityGraph from "./GithubActivityGraph";
 import GithubMostUsedLanguages from "./GithubMostUsedLanguages";
 import GithubPinRepo from "./GithubPinRepo";
@@ -9,6 +11,7 @@ import GithubStats from "./GithubStats";
 import GithubStreak from "./GithubStreak";
 import GithubTrophy from "./GithubTrophy";
 import LatestBlogPost from "./LatestBlogPost";
+import { TemplateA, TemplateB, TemplateC } from "./Templates";
 import WakaTimeStats from "./WakatimeStats";
 
 interface IData {
@@ -29,7 +32,17 @@ export interface IBadgePanelData extends IData {
   type: "badge";
 }
 
-type IDataType = IServerlessPanelData | IActionPanelData | IBadgePanelData;
+export interface IDetailPanelData extends IData {
+  type: "detail";
+  markdownText: string;
+  footer?: React.ReactElement;
+}
+
+type IDataType =
+  | IServerlessPanelData
+  | IActionPanelData
+  | IBadgePanelData
+  | IDetailPanelData;
 
 export function isServerless(data: IDataType): data is IServerlessPanelData {
   return data?.["type"] === "serverless";
@@ -41,6 +54,10 @@ export function isAction(data: IDataType): data is IActionPanelData {
 
 export function isBadge(data: IDataType): data is IBadgePanelData {
   return data?.["type"] === "badge";
+}
+
+export function isDetail(data: IDataType): data is IDetailPanelData {
+  return data?.["type"] === "detail";
 }
 
 const database: {
@@ -57,5 +74,9 @@ const database: {
   "github-recent-activity": GithubRecentActivity,
   "latest-blog-posts": LatestBlogPost,
   badge: Badge,
+  "badge-statistics": BadgeStatistics,
+  "template-a": TemplateA,
+  "template-b": TemplateB,
+  "template-c": TemplateC,
 };
 export default database;

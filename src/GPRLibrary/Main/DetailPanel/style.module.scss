@@ -1,0 +1,14 @@
+.panel {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  :global(.markdown-body) {
+    flex: 1;
+    overflow: auto;
+  }
+}
+
+.footer {
+  padding-top: 16px;
+}

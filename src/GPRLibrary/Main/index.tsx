@@ -1,8 +1,14 @@
 import React, { useContext } from "react";
 import GlobalContext from "../context/global";
-import database, { isAction, isBadge, isServerless } from "../database";
+import database, {
+  isAction,
+  isBadge,
+  isDetail,
+  isServerless,
+} from "../database";
 import ActionPanel from "./ActionPanel";
 import BadgePanel from "./BadgePanel";
+import DetailPanel from "./DetailPanel";
 import ServerlessPanel from "./ServerlessPanel";
 
 const LibraryMain: React.FC<{}> = () => {
@@ -29,6 +35,8 @@ const LibraryMain: React.FC<{}> = () => {
     );
   } else if (isBadge(panelData)) {
     Panel = <BadgePanel />;
+  } else if (isDetail(panelData)) {
+    Panel = <DetailPanel {...panelData} />;
   }
 
   return <main>{Panel}</main>;

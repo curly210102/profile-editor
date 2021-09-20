@@ -47,11 +47,22 @@ export default function library(): BytemdPlugin {
               }
               const payloads = Array.isArray(payload) ? payload : [payload];
 
-              console.log(payloads);
-
               let pos;
-              payloads.forEach(({ title, url }) => {
-                pos = appendBlock(`![${title}](${url})`);
+              payloads.forEach((payload) => {
+                const { type } = payload;
+
+                console.log(type);
+                if (type === "image") {
+                  pos = appendBlock(`![${payload.title}](${payload.url})`);
+                } else if (type === "link") {
+                  pos = appendBlock(`[${payload.title}](${payload.url})`);
+                } else if (type === "markdown") {
+                  if (payload.cover) {
+                    editor.setValue(payload.text);
+                  } else {
+                    pos = appendBlock(payload.text);
+                  }
+                }
               });
               pos && editor.setSelection(pos);
               editor.focus();

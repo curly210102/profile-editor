@@ -21,7 +21,17 @@ const reducer: React.Reducer<
   }
 };
 
-type IExportSubmitPayload = { title: string; url: string };
+type IExportSubmitPayload =
+  | {
+      type: "image" | "link";
+      title: string;
+      url: string;
+    }
+  | {
+      type: "markdown";
+      text: string;
+      cover?: boolean;
+    };
 export type IExportSubmit = (
   payload?: IExportSubmitPayload | IExportSubmitPayload[]
 ) => void;
@@ -30,7 +40,7 @@ const ComponentLibrary: React.FC<{
   onSubmit?: IExportSubmit;
 }> = ({ onSubmit }) => {
   const [store, dispatch] = useReducer(reducer, {
-    activeId: "",
+    activeId: "template-a",
   });
   return (
     <GlobalContext.Provider
