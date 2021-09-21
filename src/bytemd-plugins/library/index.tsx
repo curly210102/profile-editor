@@ -51,7 +51,6 @@ export default function library(): BytemdPlugin {
               payloads.forEach((payload) => {
                 const { type } = payload;
 
-                console.log(type);
                 if (type === "image") {
                   pos = appendBlock(`![${payload.title}](${payload.url})`);
                 } else if (type === "link") {

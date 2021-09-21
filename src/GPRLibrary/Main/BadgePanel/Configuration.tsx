@@ -79,7 +79,7 @@ const BadgeConfiguration: React.FC<Props> = ({ updateConfiguration }) => {
         } else if (type === "select") {
           ConfigElement = (
             <Select
-              options={item.options}
+              options={item.options ?? []}
               className={styles.select}
               defaultValue={item.default}
               onChange={(v) =>

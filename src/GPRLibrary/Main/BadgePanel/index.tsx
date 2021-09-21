@@ -47,7 +47,9 @@ const BadgePanel: React.FC<Props> = () => {
   }, [selectedIconIds, isSelectedListMode, keyword]);
 
   const handleSubmit = () => {
-    onSubmit?.(selected);
+    onSubmit?.(
+      selected.map(({ title, url }) => ({ type: "image", title, url }))
+    );
   };
 
   return (

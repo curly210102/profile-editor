@@ -71,6 +71,7 @@ const ServerlessPanel: React.FC<Props> = ({
             onClick={() => {
               url &&
                 onSubmit?.({
+                  type: "image",
                   title,
                   url,
                 });
