@@ -11,7 +11,7 @@ import GithubStats from "./GithubStats";
 import GithubStreak from "./GithubStreak";
 import GithubTrophy from "./GithubTrophy";
 import LatestBlogPost from "./LatestBlogPost";
-import { TemplateA, TemplateB, TemplateC } from "./Templates";
+import templates from "./Templates";
 import WakaTimeStats from "./WakatimeStats";
 
 interface IData {
@@ -75,8 +75,6 @@ const database: {
   "latest-blog-posts": LatestBlogPost,
   badge: Badge,
   "badge-statistics": BadgeStatistics,
-  "template-a": TemplateA,
-  "template-b": TemplateB,
-  "template-c": TemplateC,
+  ...templates,
 };
 export default database;

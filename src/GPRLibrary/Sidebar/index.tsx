@@ -7,7 +7,7 @@ import styles from "./index.module.scss";
 const libraryData = [
   {
     category: "template",
-    items: ["template-a", "template-b", "template-c"],
+    items: ["naidu", "zhenye", "iampavangandhi"],
   },
   {
     category: "badge",

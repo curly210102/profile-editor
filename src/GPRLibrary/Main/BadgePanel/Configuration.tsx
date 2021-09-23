@@ -7,11 +7,13 @@ import styles from "./Configuration.module.scss";
 import { IConfiguration } from "./Main";
 
 interface Props {
+  activeBadge: string;
   configuration: IConfiguration;
   updateConfiguration: (v: Partial<IConfiguration>) => void;
+  instanceSectionHeader: React.ReactElement;
 }
 
-const items = [
+const globalItems = [
   {
     name: "theme",
     type: "select" as const,
@@ -25,6 +27,9 @@ const items = [
     options: ["plastic", "flat", "flat-square", "for-the-badge", "social"],
     default: "for-the-badge",
   },
+];
+
+const instanceItems = [
   {
     name: "link",
     type: "string" as const,
@@ -60,68 +65,89 @@ const items = [
   },
 ];
 
-const BadgeConfiguration: React.FC<Props> = ({ updateConfiguration }) => {
+const BadgeConfiguration: React.FC<Props> = ({
+  activeBadge,
+  updateConfiguration,
+  instanceSectionHeader,
+}) => {
+  const renderItem = (
+    item: typeof globalItems[number] | typeof instanceItems[number]
+  ) => {
+    const { type } = item;
+    let ConfigElement: React.ReactElement | null = null;
+    if (type === "color") {
+      ConfigElement = (
+        <ColorPicker
+          onBlur={(v) =>
+            updateConfiguration({
+              [item.name]: v[0].slice(1),
+            })
+          }
+        />
+      );
+    } else if (type === "select") {
+      ConfigElement = (
+        <Select
+          options={item.options ?? []}
+          className={styles.select}
+          defaultValue={item.default}
+          onChange={(v) =>
+            updateConfiguration({
+              [item.name]: v,
+            })
+          }
+        />
+      );
+    } else if (type === "number") {
+      ConfigElement = (
+        <NumberInput
+          className={styles.numberInput}
+          defaultValue={item.default}
+          onChange={(v) =>
+            updateConfiguration({
+              [item.name]: v,
+            })
+          }
+        />
+      );
+    } else {
+      ConfigElement = (
+        <TextInput
+          onChange={(v) =>
+            updateConfiguration({
+              [item.name]: v,
+            })
+          }
+          className={styles.textInput}
+          description={item.description}
+        />
+      );
+    }
+    return ConfigElement;
+  };
   return (
     <div className={styles.container}>
-      {items.map((item) => {
-        const { type } = item;
-        let ConfigElement: React.ReactElement | null = null;
-        if (type === "color") {
-          ConfigElement = (
-            <ColorPicker
-              onBlur={(v) =>
-                updateConfiguration({
-                  [item.name]: v[0].slice(1),
-                })
-              }
-            />
-          );
-        } else if (type === "select") {
-          ConfigElement = (
-            <Select
-              options={item.options ?? []}
-              className={styles.select}
-              defaultValue={item.default}
-              onChange={(v) =>
-                updateConfiguration({
-                  [item.name]: v,
-                })
-              }
-            />
-          );
-        } else if (type === "number") {
-          ConfigElement = (
-            <NumberInput
-              className={styles.numberInput}
-              defaultValue={item.default}
-              onChange={(v) =>
-                updateConfiguration({
-                  [item.name]: v,
-                })
-              }
-            />
-          );
-        } else {
-          ConfigElement = (
-            <TextInput
-              onChange={(v) =>
-                updateConfiguration({
-                  [item.name]: v,
-                })
-              }
-              className={styles.textInput}
-              description={item.description}
-            />
-          );
-        }
-
-        return (
-          <div className={styles.item} key={item.name}>
-            <p>{item.name}</p>
-            {ConfigElement}
+      <section className={styles.configurationSection}>
+        {globalItems.map((item) => (
+          <div className={styles.sectionItem} key={item.name}>
+            <p className={styles.label}>{item.name}</p>
+            {renderItem(item)}
           </div>
-        );
-      })}
+        ))}
+      </section>
+      {activeBadge ? (
+        <section className={styles.configurationSection} key={activeBadge}>
+          <header className={styles.sectionHeader}>
+            {instanceSectionHeader}
+          </header>
+          {instanceItems.map((item) => (
+            <div className={styles.sectionItem} key={item.name}>
+              <p className={styles.label}>{item.name}</p>
+              {renderItem(item)}
+            </div>
+          ))}
+        </section>
+      ) : null}
     </div>
   );
 };

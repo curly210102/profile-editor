@@ -11,7 +11,7 @@ const BadgeStatistics: IDetailPanelData = {
   promotional purposes.
 
   <div align="right" style="margin-right: 24px">
-  <a href="https://shields.io/">
+  <a href="https://shields.io/" target="__blank">
     Link to
   </a>   
   </div>
@@ -22,7 +22,7 @@ Count visitors for Profile Readme, Project Readme, issue page, PR page
 in GitHub
 
 <div align="right" style="margin-right: 24px">
-  <a href="https://visitor-badge.glitch.me/">
+  <a href="https://visitor-badge.glitch.me/" target="__blank">
     Link to
   </a>
 </div>

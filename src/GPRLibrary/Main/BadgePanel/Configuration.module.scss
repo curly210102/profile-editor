@@ -3,10 +3,23 @@
   overflow-y: auto;
 }
 
-.item {
+.configurationSection {
+  padding-bottom: 16px;
+  border-bottom: 1px dashed rgb(var(--border-color));
+}
+
+.sectionHeader,
+.sectionItem {
   padding: 12px 0;
-  margin: 0 10px;
+  margin: 0 16px;
+}
+
+.sectionItem {
   border-bottom: 1px solid rgb(var(--border-color));
+}
+
+.label {
+  font-weight: bold;
 }
 
 .textInput {

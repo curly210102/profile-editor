@@ -11,6 +11,7 @@ const { icons } = iconSource;
 export interface IBadge {
   title: string;
   hex: string;
+  url?: string;
 }
 
 export interface ISelected {
@@ -20,7 +21,7 @@ export interface ISelected {
 
 interface Props {}
 const BadgePanel: React.FC<Props> = () => {
-  const [filteredList, setFilteredList] = useState<typeof icons>([]);
+  const [filteredList, setFilteredList] = useState<IBadge[]>([]);
   const [selected, setSelected] = useState<ISelected[]>([]);
   const [isSelectedListMode, setSelectedListMode] = useState(false);
   const [keyword, setKeyword] = useState("");
@@ -29,22 +30,29 @@ const BadgePanel: React.FC<Props> = () => {
   const selectedIconIds = useMemo(() => {
     return new Set(selected.map((s) => s.title));
   }, [selected]);
+  const selectedIcons = useMemo(() => {
+    return new Map(selected.map((s) => [s.title, s.url]));
+  }, [selected]);
 
   useEffect(() => {
-    if (keyword) {
-      const regexp = new RegExp(`^${keyword}`, "i");
-      setFilteredList(
-        icons.filter(({ title }) => {
-          return (
-            regexp.test(title) &&
-            (!isSelectedListMode || selectedIconIds.has(title))
-          );
-        })
-      );
-    } else {
-      setFilteredList([]);
-    }
-  }, [selectedIconIds, isSelectedListMode, keyword]);
+    const filteredList: IBadge[] = [];
+    const regexp = keyword ? new RegExp(`^${keyword}`, "i") : null;
+
+    icons.forEach((icon) => {
+      const { title } = icon;
+      if (
+        (!regexp || regexp.test(title)) &&
+        (!isSelectedListMode || selectedIcons.has(title))
+      ) {
+        filteredList.push({
+          ...icon,
+          url: selectedIcons.get(title) ?? "",
+        });
+      }
+    });
+
+    setFilteredList(filteredList);
+  }, [isSelectedListMode, keyword, selectedIcons]);
 
   const handleSubmit = () => {
     onSubmit?.(
@@ -61,7 +69,9 @@ const BadgePanel: React.FC<Props> = () => {
         <BadgePanelMain
           list={filteredList}
           onSelect={(v) => {
-            setSelected((state) => [...state, v]);
+            setSelected((state) =>
+              state.filter(({ title }) => title !== v.title).concat([v])
+            );
           }}
           onUnselect={(v) => {
             setSelected((state) => state.filter(({ title }) => title !== v));

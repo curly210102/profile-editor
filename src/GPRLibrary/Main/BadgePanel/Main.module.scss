@@ -7,6 +7,13 @@
 .badgeList {
   flex-grow: 1;
   overflow: auto;
+  padding-right: 16px;
+}
+
+.configurationContainer {
+  width: 38%;
+  border-left: 1px solid rgb(var(--border-color));
+  overflow: hidden;
 }
 
 .badgeBlock {
@@ -26,6 +33,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  .checkIcon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(50%, -50%);
+  }
 }
 
 .badgePreview {
@@ -35,9 +49,10 @@
   height: 30px;
 }
 
-.configurationContainer {
-  margin-left: 16px;
-  width: 32%;
-  border-left: 1px solid rgb(var(--border-color));
-  overflow: hidden;
+.sectionHeaderButton {
+  width: 100%;
+
+  & + .sectionHeaderButton {
+    margin-top: 6px;
+  }
 }

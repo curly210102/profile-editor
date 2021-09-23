@@ -1,7 +1,8 @@
-import cx from "classnames";
-import React, { useCallback, useRef, useState } from "react";
+import cx, { Argument } from "classnames";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useVirtual } from "react-virtual";
 import type { IBadge, ISelected } from ".";
+import Button from "../../../components/Button";
 import BadgeConfiguration from "./Configuration";
 import styles from "./Main.module.scss";
 
@@ -30,6 +31,7 @@ const BadgePanelMain: React.FC<Props> = ({
   onUnselect,
   onSelect,
 }) => {
+  const [activeBadgeName, setActiveBadgeName] = useState<string>("");
   const [configuration, setConfiguration] = useState<IConfiguration>({
     theme: "default",
     style: "for-the-badge",
@@ -43,6 +45,20 @@ const BadgePanelMain: React.FC<Props> = ({
     },
     []
   );
+  const activeBadgeInfo = useRef({
+    title: "",
+    url: "",
+    isChanged: false,
+  });
+  useEffect(() => {
+    setConfiguration((prevState) => ({
+      theme: prevState.theme,
+      style: prevState.style,
+    }));
+  }, [activeBadgeName]);
+  useEffect(() => {
+    setActiveBadgeName("");
+  }, [list]);
   const listContainerRef = useRef<HTMLDivElement | null>(null);
   const rowVirtualizer = useVirtual({
     size: list.length,
@@ -66,15 +82,30 @@ const BadgePanelMain: React.FC<Props> = ({
         >
           {rowVirtualizer.virtualItems.map((virtualRow) => {
             const item = list[virtualRow.index];
-            const { title } = item;
-            const url = generateUrl({
+            const { title, url: selectedUrl } = item;
+            const isActive = activeBadgeName === title;
+            const currentUrl = generateUrl({
               ...item,
-              ...configuration,
+              ...(isActive
+                ? configuration
+                : {
+                    theme: configuration.theme,
+                    style: configuration.style,
+                  }),
             });
+            const url = selectedUrl || currentUrl;
+
+            if (isActive) {
+              activeBadgeInfo.current = {
+                title,
+                url: currentUrl,
+                isChanged: currentUrl !== url,
+              };
+            }
             return (
               <div
                 className={cx(styles.badgeBlock, {
-                  [styles.selected]: selectedIds.has(title),
+                  [styles.selected]: isActive,
                 })}
                 ref={virtualRow.measureRef}
                 key={title}
@@ -86,17 +117,15 @@ const BadgePanelMain: React.FC<Props> = ({
                   transform: `translateY(${virtualRow.start}px)`,
                 }}
                 onClick={() => {
-                  if (selectedIds.has(title)) onUnselect(title);
-                  else
-                    onSelect({
-                      title,
-                      url,
-                    });
+                  setActiveBadgeName(title);
                 }}
               >
                 {title}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img className={styles.badgePreview} src={url} alt={title} />
+                {selectedIds.has(title) ? (
+                  <CheckIcon className={styles.checkIcon} />
+                ) : null}
               </div>
             );
           })}
@@ -104,8 +133,38 @@ const BadgePanelMain: React.FC<Props> = ({
       </div>
       <div className={styles.configurationContainer}>
         <BadgeConfiguration
+          activeBadge={activeBadgeName}
           configuration={configuration}
           updateConfiguration={updateConfiguration}
+          instanceSectionHeader={
+            <>
+              {!selectedIds.has(activeBadgeName) ||
+              activeBadgeInfo.current.isChanged ? (
+                <Button
+                  className={styles.sectionHeaderButton}
+                  onClick={() => {
+                    onSelect({
+                      title: activeBadgeInfo.current.title,
+                      url: activeBadgeInfo.current.url,
+                    });
+                  }}
+                >
+                  {selectedIds.has(activeBadgeName) ? "Update" : "Add"}{" "}
+                  {activeBadgeName}
+                </Button>
+              ) : null}
+              {selectedIds.has(activeBadgeName) ? (
+                <Button
+                  className={styles.sectionHeaderButton}
+                  onClick={() => {
+                    onUnselect(activeBadgeInfo.current.title);
+                  }}
+                >
+                  Remove {activeBadgeName}
+                </Button>
+              ) : null}
+            </>
+          }
         />
       </div>
     </div>
@@ -209,3 +268,32 @@ const isLightColor = (color: string): boolean => {
 
   return !!rgb && 0.213 * rgb[0] + 0.715 * rgb[1] + 0.072 * rgb[2] > 255 / 2;
 };
+
+function CheckIcon({ className }: { className: Argument }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cx(className)}
+    >
+      <rect width="48" height="48" fill="white" fillOpacity="0.01" />
+      <path
+        d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z"
+        fill="#090"
+        stroke="#090"
+        strokeWidth="4"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M16 24L22 30L34 18"
+        stroke="#fff"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
