@@ -24,9 +24,6 @@ const rgbaToHex = (rgba: { color: string; opacity: number }) => {
   const a =
     +rgba.opacity === 1 ? "" : Math.round(rgba.opacity * 255).toString(16);
   if (!rgb) throw new Error();
-  console.log(
-    `#${rgb.map((c) => (+c).toString(16).padStart(2, "0")).join("")}${a}`
-  );
   return `#${rgb.map((c) => (+c).toString(16).padStart(2, "0")).join("")}${a}`;
 };
 

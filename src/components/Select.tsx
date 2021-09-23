@@ -22,11 +22,15 @@ const Select: React.FC<Props> = ({
     <select
       className={cx(styles.select, className)}
       onChange={(e) => {
-        const selected: string[] = [];
-        Array.prototype.forEach.call(e.target.options, (option) => {
-          option.selected && option.value && selected.push(option.value);
-        });
-        onChange(selected);
+        if (multiple) {
+          const selected: string[] = [];
+          Array.prototype.forEach.call(e.target.options, (option) => {
+            option.selected && option.value && selected.push(option.value);
+          });
+          onChange(selected);
+        } else {
+          onChange(e.target.value);
+        }
       }}
       multiple={multiple}
       defaultValue={defaultValue}

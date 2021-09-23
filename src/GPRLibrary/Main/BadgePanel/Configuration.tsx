@@ -23,7 +23,7 @@ const items = [
     name: "style",
     type: "select" as const,
     options: ["plastic", "flat", "flat-square", "for-the-badge", "social"],
-    default: "flat",
+    default: "for-the-badge",
   },
   {
     name: "link",
@@ -71,7 +71,7 @@ const BadgeConfiguration: React.FC<Props> = ({ updateConfiguration }) => {
             <ColorPicker
               onBlur={(v) =>
                 updateConfiguration({
-                  [item.name]: v,
+                  [item.name]: v[0].slice(1),
                 })
               }
             />

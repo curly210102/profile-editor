@@ -1,6 +1,8 @@
 import cx from "classnames";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
+import { useVirtual } from "react-virtual";
 import type { IBadge, ISelected } from ".";
+import BadgeConfiguration from "./Configuration";
 import styles from "./Main.module.scss";
 
 interface Props {
@@ -41,46 +43,71 @@ const BadgePanelMain: React.FC<Props> = ({
     },
     []
   );
+  const listContainerRef = useRef<HTMLDivElement | null>(null);
+  const rowVirtualizer = useVirtual({
+    size: list.length,
+    parentRef: listContainerRef,
+    // @ts-ignore
+    measureSize: (el) => {
+      return (
+        el["offsetHeight"] + parseInt(window.getComputedStyle(el).marginTop, 10)
+      );
+    },
+  });
   return (
     <div className={styles.container}>
-      <div className={styles.badgeList}>
-        {list.map((item) => {
-          const { title } = item;
-          return (
-            <div
-              className={cx(styles.badgeBlock, {
-                [styles.selected]: selectedIds.has(title),
-              })}
-              key={title}
-              onClick={() => {
-                if (selectedIds.has(title)) onUnselect(title);
-                else
-                  onSelect({
-                    title,
-                    url: generateUrl({
-                      ...item,
-                      ...configuration,
-                    }),
-                  });
-              }}
-            >
-              {title}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={generateUrl({
-                  ...item,
-                  ...configuration,
+      <div className={styles.badgeList} ref={listContainerRef}>
+        <div
+          style={{
+            height: `${rowVirtualizer.totalSize}px`,
+            width: "100%",
+            position: "relative",
+          }}
+        >
+          {rowVirtualizer.virtualItems.map((virtualRow) => {
+            const item = list[virtualRow.index];
+            const { title } = item;
+            const url = generateUrl({
+              ...item,
+              ...configuration,
+            });
+            return (
+              <div
+                className={cx(styles.badgeBlock, {
+                  [styles.selected]: selectedIds.has(title),
                 })}
-                alt={title}
-              />
-            </div>
-          );
-        })}
+                ref={virtualRow.measureRef}
+                key={title}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  transform: `translateY(${virtualRow.start}px)`,
+                }}
+                onClick={() => {
+                  if (selectedIds.has(title)) onUnselect(title);
+                  else
+                    onSelect({
+                      title,
+                      url,
+                    });
+                }}
+              >
+                {title}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className={styles.badgePreview} src={url} alt={title} />
+              </div>
+            );
+          })}
+        </div>
       </div>
-      {/* <BadgeConfiguration
-        configuration={configuration}
-        updateConfiguration={updateConfiguration}
-      /> */}
+      <div className={styles.configurationContainer}>
+        <BadgeConfiguration
+          configuration={configuration}
+          updateConfiguration={updateConfiguration}
+        />
+      </div>
     </div>
   );
 };
@@ -92,6 +119,13 @@ function generateUrl({
   theme,
   hex,
   style,
+  logoColor,
+  labelColor,
+  color,
+  link,
+  label,
+  message,
+  logoWidth,
 }: {
   title: string;
   hex: string;
@@ -107,7 +141,9 @@ function generateUrl({
 }) {
   const slug = titleToSlug(title);
   if (theme === "logo") {
-    `https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/${slug}.svg`;
+    return (
+      `/api/icon?name=${slug}` + (logoColor ? `&logoColor=${logoColor}` : "")
+    );
   }
 
   const isDefaultTheme = theme === "default";
@@ -118,14 +154,32 @@ function generateUrl({
         logoColor: isLight ? "000" : "fff",
       }
     : {
-        color: isLight ? "000" : "fff",
-        logoColor: isLight ? "000" : "fff",
+        color: hex === "000" ? "fff" : "000",
+        logoColor: hex === "000" ? "000" : "fff",
         labelColor: hex,
       };
 
+  if (logoColor) {
+    colors.logoColor = logoColor;
+  }
+  if (labelColor) {
+    colors.labelColor = labelColor;
+  }
+  if (color) {
+    colors.color = color;
+  }
+
+  const extra = {
+    link: link ? encodeURIComponent(link) : "",
+    label,
+    message,
+    logoWidth,
+  };
+
   return `https://img.shields.io/badge/${encodeURIComponent(
     title.replace(/\-/g, "--").replace(/\_/g, "__")
-  )}-143?style=${style}&logo=${slug}&${Object.entries(colors)
+  )}-143?style=${style}&logo=${slug}&${Object.entries({ ...colors, ...extra })
+    .filter(([_, value]) => !!value)
     .map(([name, value]) => `${name}=${value}`)
     .join("&")}`;
 }
